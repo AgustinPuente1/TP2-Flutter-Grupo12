@@ -27,9 +27,10 @@ class DrawerMenu extends StatelessWidget {
                         iconColor: Colors.blueGrey,
                         title: Text(item['title']!,
                             style: const TextStyle(fontFamily: 'FuzzyBubbles')),
-                        subtitle: Text(item['subtitle'] ?? '',
-                            style: const TextStyle(
-                                fontFamily: 'RobotoMono', fontSize: 11)),
+                        subtitle: Text(item['subtitle']!.isEmpty
+                            ? 'Tap to go to ${item['title']}'
+                            : item['subtitle']!,
+                            style: const TextStyle(fontFamily: 'RobotoMono', fontSize: 11)),
                         leading: const Icon(Icons.arrow_right),
                         /* trailing: const Icon(Icons.arrow_right), */
                         onTap: () {
