@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tp2_flutter_grupo12/helpers/preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:tp2_flutter_grupo12/providers/theme_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -30,26 +31,22 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class BodyProfile extends StatelessWidget {
-  final bool darkMode = false;
-
-  const BodyProfile({
-    super.key,
-  });
+  const BodyProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Column(
       children: [
         SwitchListTile.adaptive(
           title: const Text('Dark Mode'),
-          value: Preferences.darkmode,
+          value: themeProvider.isDarkMode,
           onChanged: (bool value) {
-            Preferences.darkmode = value;
+            themeProvider.toggleTheme(value);
           },
         ),
-        const SizedBox(
-          height: 15,
-        ),
+        const SizedBox(height: 15),
       ],
     );
   }
