@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:tp2_flutter_grupo12/widgets/usuarios_card.dart';
+import 'package:tp2_flutter_grupo12/widgets/usuarios_search_bar.dart';
 import 'package:tp2_flutter_grupo12/mocks/people_mock.dart' show elements;
 
 class UsuariosListScreen extends StatefulWidget {
@@ -46,16 +47,34 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      top: true,
-      child: Scaffold(
-          body: Column(children: [
-        searchArea(),
-        listItemsArea(),
-      ])),
-    );
-  }
+Widget build(BuildContext context) {
+  return SafeArea(
+    top: true,
+    child: Scaffold(
+      body: Column(
+        children: [
+          UsuariosSearchBar(
+            isActive: _searchActive,
+            searchController: _searchController,
+            focusNode: _focusNode,
+            onClose: () {
+              _searchController.clear();
+              FocusManager.instance.primaryFocus?.unfocus();
+              _updateSearch('');
+            },
+            onBack: () {
+              setState(() {
+                _searchActive = !_searchActive;
+              });
+            },
+            onSearch: (value) => _updateSearch(value),
+          ),
+          listItemsArea(),
+        ],
+      ),
+    ),
+  );
+}
 
   Expanded listItemsArea() {
   return Expanded(
@@ -90,69 +109,5 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
   );
 }
 
-  AnimatedSwitcher searchArea() {
-    return AnimatedSwitcher(
-      switchInCurve: Curves.bounceIn,
-      switchOutCurve: Curves.bounceOut,
-      duration: const Duration(milliseconds: 300),
-      child: (_searchActive)
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _searchController,
-                      focusNode: _focusNode,
-                      onChanged: (value) {
-                        _updateSearch(value);
-                      },
-                      onFieldSubmitted: (value) {
-                        _updateSearch(value);
-                      },
-                      decoration: const InputDecoration(hintText: 'Buscar...'),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      _searchController.clear();
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      _updateSearch('');
-                    },
-                    icon: const Icon(Icons.clear),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _searchActive = false;
-                      });
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                ],
-              ),
-            )
-          : Container(
-              padding: const EdgeInsets.all(2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.keyboard_arrow_left_outlined)),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _searchActive = !_searchActive;
-                        });
-                        _focusNode.requestFocus();
-                      },
-                      icon: const Icon(Icons.search)),
-                ],
-              ),
-            ),
-    );
-  }
+  
 }
