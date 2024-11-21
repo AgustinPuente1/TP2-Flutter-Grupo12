@@ -1,15 +1,16 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:tp2_flutter_grupo12/widgets/usuarios_card.dart';
 import 'package:tp2_flutter_grupo12/mocks/people_mock.dart' show elements;
 
-class PuenteListScreen extends StatefulWidget {
-  const PuenteListScreen({super.key});
+class UsuariosListScreen extends StatefulWidget {
+  const UsuariosListScreen({super.key});
 
   @override
-  State<PuenteListScreen> createState() => _PuenteListScreenState();
+  State<UsuariosListScreen> createState() => _UsuariosListScreenState();
 }
 
-class _PuenteListScreenState extends State<PuenteListScreen> {
+class _UsuariosListScreenState extends State<UsuariosListScreen> {
   List _auxiliarElements = [];
   String _searchQuery = '';
   bool _searchActive = false;
@@ -57,74 +58,37 @@ class _PuenteListScreenState extends State<PuenteListScreen> {
   }
 
   Expanded listItemsArea() {
-    return Expanded(
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: _auxiliarElements.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, 'custom_list_item',
-                  arguments: <String, dynamic>{
-                    'avatar': elements[index][0],
-                    'name': elements[index][1],
-                    'cargo': elements[index][2],
-                    'stars': elements[index][3],
-                    'favorite': elements[index][4],
-                  });
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            onLongPress: () {
-              log('onLongPress $index');
-            },
-            child: Container(
-              height: 100,
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(1),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color.fromARGB(31, 206, 219, 246),
-                        blurRadius: 0,
-                        spreadRadius: 3,
-                        offset: Offset(0, 6))
-                  ]),
-              child: Row(
-                children: [
-                  Image.asset(
-                      'assets/avatars/${_auxiliarElements[index][0]}.png',
-                      width: 50,
-                      height: 50),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _auxiliarElements[index][1],
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
-                        ),
-                        Text(_auxiliarElements[index][2]),
-                      ],
-                    ),
-                  ),
-                  Icon(_auxiliarElements[index][4]
-                      ? Icons.star
-                      : Icons.star_border_outlined),
-                  Text(_auxiliarElements[index][3].toString())
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+  return Expanded(
+    child: ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemCount: _auxiliarElements.length,
+      itemBuilder: (BuildContext context, int index) {
+        final element = _auxiliarElements[index];
+
+        return UsuariosCard(
+          avatarPath: element[0],
+          name: element[1],
+          role: element[2],
+          isFavorite: element[4],
+          stars: element[3],
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              'custom_list_item',
+              arguments: {
+                'avatar': element[0],
+                'name': element[1],
+                'cargo': element[2],
+                'stars': element[3],
+                'favorite': element[4],
+              },
+            );
+          },
+        );
+      },
+    ),
+  );
+}
 
   AnimatedSwitcher searchArea() {
     return AnimatedSwitcher(
