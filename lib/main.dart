@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
             'profile': (context) => const ProfileScreen(),
             'custom_list_item': (context) => const CustomListItem(),
             'balot_list': (context) => const BalotListScreen(),
+            'movie_details': (context) => MovieDetailsScreen(),
           },
         );
       },
