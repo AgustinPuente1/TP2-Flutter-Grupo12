@@ -113,89 +113,96 @@ class _BalotListScreenState extends State<BalotListScreen> {
   }
 
   Widget _buildGridView(Color starColor, Color cardColor) {
-    return Expanded(
-      child: GridView.builder(
-        padding: const EdgeInsets.all(10),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.65, // Ajustado para dar más espacio vertical
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemCount: _filteredMovies.length,
-        itemBuilder: (context, index) {
-          final movie = _filteredMovies[index];
-          String movieTitle = movie['title'] ?? 'Sin título';
-          String movieImage = movie['image'] ?? '';
+  return Expanded(
+    child: GridView.builder(
+      padding: const EdgeInsets.all(10),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.62, // Aumentado ligeramente para dar más espacio vertical
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: _filteredMovies.length,
+      itemBuilder: (context, index) {
+        final movie = _filteredMovies[index];
+        String movieTitle = movie['title'] ?? 'Sin título';
+        String movieImage = movie['image'] ?? '';
 
-          return GestureDetector(
-            onTap: () => _navigateToDetails(movie),
-            child: Card(
-              color: cardColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    flex: 4, // Aumentado para la imagen
-                    child: _buildMovieImage(movieImage),
-                  ),
-                  Expanded(
-                    flex: 3, // Aumentado para el contenido
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min, // Para que se ajuste al contenido
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              movieTitle,
-                              style: TextStyle(
-                                color: Preferences.darkmode ? Colors.white : Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            movie['genre'] ?? 'Género Desconocido',
+        return GestureDetector(
+          onTap: () => _navigateToDetails(movie),
+          child: Card(
+            color: cardColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Imagen de la película
+                Expanded(
+                  flex: 6, // Reducido ligeramente para dar más espacio al contenido
+                  child: _buildMovieImage(movieImage),
+                ),
+                // Contenido (título, género, calificación)
+                Expanded(
+                  flex: 4, // Aumentado para dar más espacio al contenido
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Título con altura dinámica
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            movieTitle,
                             style: TextStyle(
+                              color: Preferences.darkmode ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13, // Tamaño de fuente reducido
+                            ),
+                            maxLines: 3, // Aumentado a 3 líneas
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        // Género
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            movie['genre'] ?? 'Género Desconocido',
+                            style: const TextStyle(
                               color: Colors.grey,
-                              fontSize: 12,
+                              fontSize: 11,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const Spacer(), // Empuja la calificación hacia abajo
-                          Row(
-                            children: [
-                              Icon(Icons.star, color: starColor, size: 16),
-                              const SizedBox(width: 4),
-                              Text(
-                                (movie['rating']?.toStringAsFixed(1)) ?? '0.0',
-                                style: TextStyle(
-                                  color: Preferences.darkmode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
+                        ),
+                        // Calificación
+                        Row(
+                          children: [
+                            Icon(Icons.star, color: starColor, size: 16),
+                            const SizedBox(width: 4),
+                            Text(
+                              (movie['rating']?.toStringAsFixed(1)) ?? '0.0',
+                              style: TextStyle(
+                                color: Preferences.darkmode ? Colors.white : Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        },
-      ),
-    );
-  }
-
+          ),
+        );
+      },
+    ),
+  );
+}
   Widget _buildMovieImage(String movieImage) {
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
