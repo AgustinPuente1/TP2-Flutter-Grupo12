@@ -1,10 +1,10 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tp2_flutter_grupo12/screens/usuarios_details_screen.dart';
+import 'package:tp2_flutter_grupo12/service/usuarios_favorites.dart';
 import 'package:tp2_flutter_grupo12/widgets/usuarios_card.dart';
 import 'package:tp2_flutter_grupo12/widgets/usuarios_search_bar.dart';
-import 'package:tp2_flutter_grupo12/mocks/usuarios_mock.dart' show elements;
+import 'package:tp2_flutter_grupo12/mocks/usuarios_mock.dart' show elements; // Importar el nuevo archivo
 
 class UsuariosListScreen extends StatefulWidget {
   const UsuariosListScreen({super.key});
@@ -24,20 +24,26 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
   @override
   void initState() {
     super.initState();
-    // Crear copias mutables de los elementos al inicio
-    _auxiliarElements = List.from(elements.map((element) => List.from(element)));
-    _loadFavorites();
+    _auxiliarElements = List.from(elements.map((element) => List.from(element))); // Crear copia de los elementos
+    _loadFavorites(); // Cargar favoritos
   }
 
   @override
   void dispose() {
-    // Guardar los cambios de favoritos cuando la app se cierra
-    _saveFavorites();
-    _searchController.dispose();
-    _focusNode.dispose();
     super.dispose();
   }
 
+  // Cargar los favoritos
+  void _loadFavorites() async {
+    for (var element in _auxiliarElements) {
+      bool isFavorite = await FavoritesManager.loadFavorite(element[0].toString());
+      setState(() {
+        element[7] = isFavorite; // Cambiar el estado de favorito
+      });
+    }
+  }
+
+  // Actualizar la búsqueda de los usuarios
   void _updateSearch(String? query) {
     setState(() {
       _searchQuery = query ?? '';
@@ -50,23 +56,6 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
         }).map((element) => List.from(element)).toList();  // Crear copias mutables para cada resultado
       }
     });
-  }
-
-  void _loadFavorites() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    for (var element in _auxiliarElements) {
-      bool isFavorite = prefs.getBool('favorite_${element[0]}') ?? false; // Verificar si es favorito
-      setState(() {
-        element[7] = isFavorite; // Cambiar el estado de favorito
-      });
-    }
-  }
-
-  void _saveFavorites() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    for (var element in _auxiliarElements) {
-      prefs.setBool('favorite_${element[0]}', element[7]); // Guardar estado de favorito
-    }
   }
 
   @override
@@ -109,35 +98,38 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
           final element = _auxiliarElements[index];
 
           return UsuariosCard(
-  avatar: element[1],
-  firstName: element[2],
-  lastName: element[3],
-  gender: element[5],
-  country: element[6],
-  isFavorite: element[7],
-  onFavoriteTap: () {
-    setState(() {
-      element[7] = !element[7];
-    });
-  },
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => UsuarioDetailScreen(
-          usuario: {
-            'avatar': element[1],
-            'firstName': element[2],
-            'lastName': element[3],
-            'email': element[4],
-            'gender': element[5],
-            'country': element[6],
-          },
-        ),
-      ),
-    );
-  },
-);
+            avatar: element[1],
+            firstName: element[2],
+            lastName: element[3],
+            gender: element[5],
+            country: element[6],
+            isFavorite: element[7],
+            onFavoriteTap: () async {
+              setState(() {
+                element[7] = !element[7];
+              });
+              await FavoritesManager.saveFavorite(element[0].toString(), element[7]); // Guardar favorito en SharedPreferences
+            },
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UsuarioDetailScreen(
+                    usuario: {
+                      'id': element[0],
+                      'avatar': element[1],
+                      'firstName': element[2],
+                      'lastName': element[3],
+                      'email': element[4],
+                      'gender': element[5],
+                      'country': element[6],
+                      'isFavorite': element[7],
+                    },
+                  ),
+                ),
+              );
+            },
+          );
         },
       ),
     );
