@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tp2_flutter_grupo12/screens/usuarios_details_screen.dart';
 import 'package:tp2_flutter_grupo12/widgets/usuarios_card.dart';
 import 'package:tp2_flutter_grupo12/widgets/usuarios_search_bar.dart';
 import 'package:tp2_flutter_grupo12/mocks/usuarios_mock.dart' show elements;
@@ -108,18 +109,35 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
           final element = _auxiliarElements[index];
 
           return UsuariosCard(
-            avatar: element[1],
-            firstName: element[2],
-            lastName: element[3],
-            gender: element[5],
-            country: element[6],
-            isFavorite: element[7],
-            onFavoriteTap: () {
-              setState(() {
-                element[7] = !element[7];  // Cambiar el estado de favorito
-              });
-            },
-          );
+  avatar: element[1],
+  firstName: element[2],
+  lastName: element[3],
+  gender: element[5],
+  country: element[6],
+  isFavorite: element[7],
+  onFavoriteTap: () {
+    setState(() {
+      element[7] = !element[7];
+    });
+  },
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UsuarioDetailScreen(
+          usuario: {
+            'avatar': element[1],
+            'firstName': element[2],
+            'lastName': element[3],
+            'email': element[4],
+            'gender': element[5],
+            'country': element[6],
+          },
+        ),
+      ),
+    );
+  },
+);
         },
       ),
     );
