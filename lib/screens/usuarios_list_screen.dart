@@ -15,7 +15,8 @@ class UsuariosListScreen extends StatefulWidget {
 }
 
 class _UsuariosListScreenState extends State<UsuariosListScreen> {
-  List<Usuario> _auxiliarElements = [];
+  List<Usuario> _originalElements = []; // Lista fija con todos los usuarios
+  List<Usuario> _auxiliarElements = []; // Lista filtrada para la UI
   String _searchQuery = '';
   bool _searchActive = false;
 
@@ -29,8 +30,9 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
     _loadFavorites(); // Cargar favoritos desde SharedPreferences
   }
 
+  // Carga inicial de todos los usuarios (solo una vez)
   void _initializeUsuarios() {
-    _auxiliarElements = elements.map((element) {
+    _originalElements = elements.map((element) {
       return Usuario(
         id: element[0],
         avatar: element[1],
@@ -42,14 +44,17 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
         isFavorite: false, // Por defecto no es favorito
       );
     }).toList();
+    _auxiliarElements = List.from(_originalElements); // Copia para la UI
   }
 
   // Cargar los favoritos desde SharedPreferences
   void _loadFavorites() async {
-    for (var usuario in _auxiliarElements) {
+    for (var usuario in _originalElements) {
       usuario.isFavorite = await FavoritesManager.loadFavorite(usuario.id.toString());
     }
-    setState(() {}); // Actualizar la UI
+    setState(() {
+      _auxiliarElements = List.from(_originalElements); // Actualizar UI
+    });
   }
 
   // Actualizar la búsqueda de usuarios
@@ -57,22 +62,11 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
     setState(() {
       _searchQuery = query ?? '';
       if (_searchQuery.isEmpty) {
-        _initializeUsuarios(); // Restablecer la lista completa
+        _auxiliarElements = List.from(_originalElements); // Restablecer lista original
       } else {
-        _auxiliarElements = elements.where((element) {
-          final fullName = '${element[2]} ${element[3]}'.toLowerCase();
+        _auxiliarElements = _originalElements.where((usuario) {
+          final fullName = '${usuario.firstName} ${usuario.lastName}'.toLowerCase();
           return fullName.contains(_searchQuery.toLowerCase());
-        }).map((element) {
-          return Usuario(
-            id: element[0],
-            avatar: element[1],
-            firstName: element[2],
-            lastName: element[3],
-            email: element[4],
-            gender: element[5],
-            country: element[6],
-            isFavorite: false,
-          );
         }).toList();
       }
     });
@@ -92,7 +86,7 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
               onClose: () {
                 _searchController.clear();
                 FocusManager.instance.primaryFocus?.unfocus();
-                _updateSearch('');
+                _updateSearch(''); // Restablecer búsqueda
               },
               onBack: () {
                 setState(() {
@@ -107,6 +101,7 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
       ),
     );
   }
+
 
   // Lista de usuarios
   Expanded listItemsArea() {
