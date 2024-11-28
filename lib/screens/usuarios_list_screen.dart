@@ -135,7 +135,12 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => UsuarioDetailScreen(
-                    usuario: usuario, 
+                    usuario: usuario,
+                    onFavoriteChanged: (bool newFavorite) {
+                      setState(() {
+                        usuario.isFavorite = newFavorite; // Actualiza el estado global
+                      });
+                    },
                   ),
                 ),
               );

@@ -5,8 +5,13 @@ import 'package:tp2_flutter_grupo12/service/usuarios_favorites_manager.dart';
 
 class UsuarioDetailScreen extends StatefulWidget {
   final Usuario usuario;
+  final Function(bool) onFavoriteChanged;
 
-  const UsuarioDetailScreen({Key? key, required this.usuario}) : super(key: key);
+  const UsuarioDetailScreen({
+    Key? key,
+    required this.usuario,
+    required this.onFavoriteChanged,
+  }) : super(key: key);
 
   @override
   State<UsuarioDetailScreen> createState() => _UsuarioDetailScreenState();
@@ -19,11 +24,6 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
   void initState() {
     super.initState();
     isFavorite = widget.usuario.isFavorite;
-  }
-
-  // Guardar el estado del favorito
-  void _saveFavorite() async {
-    await FavoritesManager.saveFavorite(widget.usuario.id.toString(), isFavorite);
   }
 
   @override
@@ -71,9 +71,9 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
               onPressed: () async {
                 setState(() {
                   isFavorite = !isFavorite;
-                  widget.usuario.isFavorite = isFavorite;
                 });
-                _saveFavorite(); // Guardar el estado actualizado
+                widget.onFavoriteChanged(isFavorite); // Actualiza la lista en UsuariosListScreen
+                await FavoritesManager.saveFavorite(widget.usuario.id.toString(), isFavorite);
               },
             ),
             const SizedBox(height: 20),
