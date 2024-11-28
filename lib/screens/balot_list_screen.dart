@@ -163,7 +163,8 @@ class _BalotListScreenState extends State<BalotListScreen> {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        // Género
+              
+                        // Genero
                         Expanded(
                           flex: 1,
                           child: Text(
@@ -176,6 +177,7 @@ class _BalotListScreenState extends State<BalotListScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        
                         // Calificación
                         Row(
                           children: [
