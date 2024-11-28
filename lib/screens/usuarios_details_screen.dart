@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tp2_flutter_grupo12/service/usuarios_favorites.dart';
+import 'package:tp2_flutter_grupo12/models/usuarios_model.dart';
+import 'package:tp2_flutter_grupo12/service/usuarios_favorites_manager.dart';
 
 class UsuarioDetailScreen extends StatefulWidget {
-  final Map<String, dynamic> usuario;
+  final Usuario usuario;
 
   const UsuarioDetailScreen({Key? key, required this.usuario}) : super(key: key);
 
@@ -17,12 +18,12 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
   @override
   void initState() {
     super.initState();
-    isFavorite = widget.usuario['isFavorite'];
+    isFavorite = widget.usuario.isFavorite;
   }
 
   // Guardar el estado del favorito
   void _saveFavorite() async {
-    await FavoritesManager.saveFavorite(widget.usuario['id'].toString(), isFavorite);
+    await FavoritesManager.saveFavorite(widget.usuario.id.toString(), isFavorite);
   }
 
   @override
@@ -32,9 +33,9 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('${widget.usuario['firstName']} ${widget.usuario['lastName']}'),
+            Text('${widget.usuario.firstName} ${widget.usuario.lastName}'),
             Text(
-              'ID: ${widget.usuario['id']}',
+              'ID: ${widget.usuario.id}',
               style: const TextStyle(color: Colors.grey, fontSize: 14),
             ),
           ],
@@ -55,7 +56,7 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
               ),
               child: ClipOval(
                 child: Image.asset(
-                  'assets/avatars/${widget.usuario['avatar']}.png',
+                  'assets/avatars/${widget.usuario.avatar}.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -67,10 +68,10 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
                 isFavorite ? Icons.star : Icons.star_border,
                 color: isFavorite ? Colors.amber : Colors.grey,
               ),
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   isFavorite = !isFavorite;
-                  widget.usuario['isFavorite'] = isFavorite;
+                  widget.usuario.isFavorite = isFavorite;
                 });
                 _saveFavorite(); // Guardar el estado actualizado
               },
@@ -79,23 +80,23 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
             // Información del usuario
             ListTile(
               title: const Text("Nombre"),
-              subtitle: Text('${widget.usuario['firstName']} ${widget.usuario['lastName']}'),
+              subtitle: Text('${widget.usuario.firstName} ${widget.usuario.lastName}'),
             ),
             ListTile(
               title: const Text("Correo Electrónico"),
-              subtitle: Text(widget.usuario['email']),
+              subtitle: Text(widget.usuario.email),
             ),
             ListTile(
               title: const Text("Género"),
               subtitle: Row(
                 children: [
                   Icon(
-                    widget.usuario['gender'] == "Male" ? Icons.male : Icons.female,
-                    color: widget.usuario['gender'] == "Male" ? Colors.blue : Colors.pink,
+                    widget.usuario.gender == "Male" ? Icons.male : Icons.female,
+                    color: widget.usuario.gender == "Male" ? Colors.blue : Colors.pink,
                     size: 20,
                   ),
                   const SizedBox(width: 5),
-                  Text(widget.usuario['gender']),
+                  Text(widget.usuario.gender),
                 ],
               ),
             ),
@@ -104,12 +105,12 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
               subtitle: Row(
                 children: [
                   Image.asset(
-                    'assets/flags/${widget.usuario['country']}.png',
+                    'assets/flags/${widget.usuario.country}.png',
                     width: 20,
                     height: 20,
                   ),
                   const SizedBox(width: 5),
-                  Text(widget.usuario['country']),
+                  Text(widget.usuario.country),
                 ],
               ),
             ),

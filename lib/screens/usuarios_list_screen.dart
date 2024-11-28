@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tp2_flutter_grupo12/models/usuarios_model.dart';
 import 'package:tp2_flutter_grupo12/screens/usuarios_details_screen.dart';
-import 'package:tp2_flutter_grupo12/service/usuarios_favorites.dart';
+import 'package:tp2_flutter_grupo12/service/usuarios_favorites_manager.dart';
 import 'package:tp2_flutter_grupo12/widgets/usuarios_card.dart';
 import 'package:tp2_flutter_grupo12/widgets/usuarios_search_bar.dart';
 import 'package:tp2_flutter_grupo12/mocks/usuarios_mock.dart' show elements; // Importar el nuevo archivo
@@ -14,7 +15,7 @@ class UsuariosListScreen extends StatefulWidget {
 }
 
 class _UsuariosListScreenState extends State<UsuariosListScreen> {
-  List _auxiliarElements = [];
+  List<Usuario> _auxiliarElements = [];
   String _searchQuery = '';
   bool _searchActive = false;
 
@@ -24,36 +25,55 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
   @override
   void initState() {
     super.initState();
-    _auxiliarElements = List.from(elements.map((element) => List.from(element))); // Crear copia de los elementos
-    _loadFavorites(); // Cargar favoritos
+    _initializeUsuarios();
+    _loadFavorites(); // Cargar favoritos desde SharedPreferences
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void _initializeUsuarios() {
+    _auxiliarElements = elements.map((element) {
+      return Usuario(
+        id: element[0],
+        avatar: element[1],
+        firstName: element[2],
+        lastName: element[3],
+        email: element[4],
+        gender: element[5],
+        country: element[6],
+        isFavorite: false, // Por defecto no es favorito
+      );
+    }).toList();
   }
 
-  // Cargar los favoritos
+  // Cargar los favoritos desde SharedPreferences
   void _loadFavorites() async {
-    for (var element in _auxiliarElements) {
-      bool isFavorite = await FavoritesManager.loadFavorite(element[0].toString());
-      setState(() {
-        element[7] = isFavorite; // Cambiar el estado de favorito
-      });
+    for (var usuario in _auxiliarElements) {
+      usuario.isFavorite = await FavoritesManager.loadFavorite(usuario.id.toString());
     }
+    setState(() {}); // Actualizar la UI
   }
 
-  // Actualizar la búsqueda de los usuarios
+  // Actualizar la búsqueda de usuarios
   void _updateSearch(String? query) {
     setState(() {
       _searchQuery = query ?? '';
       if (_searchQuery.isEmpty) {
-        _auxiliarElements = List.from(elements.map((element) => List.from(element))); // Restablecer a los originales
+        _initializeUsuarios(); // Restablecer la lista completa
       } else {
         _auxiliarElements = elements.where((element) {
           final fullName = '${element[2]} ${element[3]}'.toLowerCase();
           return fullName.contains(_searchQuery.toLowerCase());
-        }).map((element) => List.from(element)).toList();  // Crear copias mutables para cada resultado
+        }).map((element) {
+          return Usuario(
+            id: element[0],
+            avatar: element[1],
+            firstName: element[2],
+            lastName: element[3],
+            email: element[4],
+            gender: element[5],
+            country: element[6],
+            isFavorite: false,
+          );
+        }).toList();
       }
     });
   }
@@ -88,43 +108,34 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
     );
   }
 
-  // Lista de elementos de usuario
+  // Lista de usuarios
   Expanded listItemsArea() {
     return Expanded(
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         itemCount: _auxiliarElements.length,
         itemBuilder: (BuildContext context, int index) {
-          final element = _auxiliarElements[index];
+          final usuario = _auxiliarElements[index];
 
           return UsuariosCard(
-            avatar: element[1],
-            firstName: element[2],
-            lastName: element[3],
-            gender: element[5],
-            country: element[6],
-            isFavorite: element[7],
+            avatar: usuario.avatar,
+            firstName: usuario.firstName,
+            lastName: usuario.lastName,
+            gender: usuario.gender,
+            country: usuario.country,
+            isFavorite: usuario.isFavorite,
             onFavoriteTap: () async {
               setState(() {
-                element[7] = !element[7];
+                usuario.isFavorite = !usuario.isFavorite;
               });
-              await FavoritesManager.saveFavorite(element[0].toString(), element[7]); // Guardar favorito en SharedPreferences
+              await FavoritesManager.saveFavorite(usuario.id.toString(), usuario.isFavorite);
             },
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => UsuarioDetailScreen(
-                    usuario: {
-                      'id': element[0],
-                      'avatar': element[1],
-                      'firstName': element[2],
-                      'lastName': element[3],
-                      'email': element[4],
-                      'gender': element[5],
-                      'country': element[6],
-                      'isFavorite': element[7],
-                    },
+                    usuario: usuario, 
                   ),
                 ),
               );
