@@ -19,6 +19,7 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
   List<Usuario> _auxiliarElements = []; // Lista filtrada para la UI
   String _searchQuery = '';
   bool _searchActive = false;
+  bool _showOnlyFavorites = false; // Estado para saber si mostrar solo favoritos
 
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -62,12 +63,26 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
     setState(() {
       _searchQuery = query ?? '';
       if (_searchQuery.isEmpty) {
-        _auxiliarElements = List.from(_originalElements); // Restablecer lista original
+        _auxiliarElements = _showOnlyFavorites
+            ? _originalElements.where((usuario) => usuario.isFavorite).toList()
+            : List.from(_originalElements); // Restablecer lista filtrada
       } else {
         _auxiliarElements = _originalElements.where((usuario) {
           final fullName = '${usuario.firstName} ${usuario.lastName}'.toLowerCase();
           return fullName.contains(_searchQuery.toLowerCase());
         }).toList();
+      }
+    });
+  }
+
+  // Alternar entre mostrar todos los usuarios o solo los favoritos
+  void _toggleFavorites() {
+    setState(() {
+      _showOnlyFavorites = !_showOnlyFavorites;
+      if (_showOnlyFavorites) {
+        _auxiliarElements = _originalElements.where((usuario) => usuario.isFavorite).toList();
+      } else {
+        _auxiliarElements = List.from(_originalElements); // Mostrar todos
       }
     });
   }
@@ -98,10 +113,15 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
             listItemsArea(),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _toggleFavorites, // Alternar favoritos
+          child: Icon(
+            _showOnlyFavorites ? Icons.star : Icons.star_border, // Cambia el ícono
+          ),
+        ),
       ),
     );
   }
-
 
   // Lista de usuarios
   Expanded listItemsArea() {
