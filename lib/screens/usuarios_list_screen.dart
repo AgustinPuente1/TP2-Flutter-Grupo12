@@ -3,8 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tp2_flutter_grupo12/models/usuarios_model.dart';
 import 'package:tp2_flutter_grupo12/screens/usuarios_details_screen.dart';
 import 'package:tp2_flutter_grupo12/service/usuarios_favorites_manager.dart';
-import 'package:tp2_flutter_grupo12/widgets/usuarios_card.dart';
-import 'package:tp2_flutter_grupo12/widgets/usuarios_search_bar.dart';
+import 'package:tp2_flutter_grupo12/widgets/widgets.dart';
 import 'package:tp2_flutter_grupo12/mocks/usuarios_mock.dart' show elements; // Importar el nuevo archivo
 
 class UsuariosListScreen extends StatefulWidget {

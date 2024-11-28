@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tp2_flutter_grupo12/models/usuarios_model.dart';
 import 'package:tp2_flutter_grupo12/service/usuarios_favorites_manager.dart';
@@ -47,17 +48,22 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
           children: [
             const SizedBox(height: 20),
             // Imagen del avatar con fondo contrastante
-            Container(
-              width: 180,
-              height: 180,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                shape: BoxShape.circle,
+            GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  child: Image.asset(
+                    'assets/avatars/${widget.usuario.avatar}.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
               child: ClipOval(
                 child: Image.asset(
                   'assets/avatars/${widget.usuario.avatar}.png',
-                  fit: BoxFit.cover,
+                  width: 180,
+                  height: 180,
+                  fit: BoxFit.cover, // Asegura el tamaño uniforme
                 ),
               ),
             ),
@@ -84,7 +90,28 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
             ),
             ListTile(
               title: const Text("Correo Electrónico"),
-              subtitle: Text(widget.usuario.email),
+              subtitle: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.usuario.email,
+                      overflow: TextOverflow.ellipsis, // Asegura que el correo no desborde
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.copy, size: 18, color: Colors.grey),
+                    padding: EdgeInsets.zero, // Reduce el padding del botón
+                    constraints: const BoxConstraints(), // Elimina restricciones de tamaño
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: widget.usuario.email));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Correo copiado al portapapeles')),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
             ListTile(
               title: const Text("Género"),
