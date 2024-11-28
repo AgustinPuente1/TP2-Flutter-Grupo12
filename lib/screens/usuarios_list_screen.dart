@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tp2_flutter_grupo12/models/usuarios_model.dart';
 import 'package:tp2_flutter_grupo12/screens/usuarios_details_screen.dart';
 import 'package:tp2_flutter_grupo12/service/usuarios_favorites_manager.dart';

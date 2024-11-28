@@ -16,105 +16,114 @@ class DrawerMenu extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const _DrawerHeaderAlternative(),
+          const _DrawerHeader(),
           ...ListTile.divideTiles(
-              context: context,
-              tiles: _menuItems
-                  .map((item) => ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
-                        dense: true,
-                        minLeadingWidth: 25,
-                        iconColor: Colors.blueGrey,
-                        title: Text(item['title']!,
-                            style: const TextStyle(fontFamily: 'FuzzyBubbles')),
-                        subtitle: Text(item['subtitle']!.isEmpty
+            context: context,
+            tiles: _menuItems
+                .map((item) => ListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      dense: true,
+                      iconColor: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black, // Aseguramos que el color de los íconos se ajuste
+                      title: Text(
+                        item['title']!,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : const Color.fromARGB(255, 53, 51, 51),
+                        ),
+                      ),
+                      subtitle: Text(
+                        item['subtitle']!.isEmpty
                             ? 'Tap to go to ${item['title']}'
                             : item['subtitle']!,
-                            style: const TextStyle(fontFamily: 'RobotoMono', fontSize: 11)),
-                        leading: const Icon(Icons.arrow_right),
-                        /* trailing: const Icon(Icons.arrow_right), */
-                        onTap: () {
-                          Navigator.pop(context);
-                          //Navigator.pushReplacementNamed(context, item['route']!);
-                          Navigator.pushNamed(context, item['route']!);
-                        },
-                      ))
-                  .toList())
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white70
+                              : Colors.black54,
+                        ),
+                      ),
+                      leading: Icon(
+                        Icons.arrow_forward, 
+                        color: Theme.of(context).brightness == Brightness.dark 
+                            ? Colors.white 
+                            : Colors.black, // Aseguramos que las flechas sean visibles
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, item['route']!);
+                      },
+                    ))
+                .toList(),
+          ),
         ],
       ),
     );
   }
 }
 
-class _DrawerHeaderAlternative extends StatelessWidget {
-  const _DrawerHeaderAlternative({
-    super.key,
-  });
+class _DrawerHeader extends StatelessWidget {
+  const _DrawerHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DrawerHeader(
       padding: EdgeInsets.zero,
-      child: Stack(children: [
-        Positioned(
-          top: -90,
-          child: Container(
-            width: 130,
-            height: 130,
-            decoration: BoxDecoration(
-                color: Colors.blueAccent.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(10)),
-            transform: Matrix4.rotationZ(0.2),
-          ),
+      decoration: const BoxDecoration(
+        color: Colors.blueGrey, // Fondo del header con un color sutil
+      ),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: [
+            // Alineación del avatar e icono
+            CircleAvatar(
+              radius: 30,
+              backgroundColor: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white // Fondo oscuro para el modo oscuro
+                  : Colors.white, // Fondo blanco para el modo claro
+              child: Icon(
+                Icons.account_circle,
+                size: 40,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.blueGrey
+                    : Colors.blueGrey, // Color del icono
+              ),
+            ),
+            const SizedBox(width: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center, // Alineación vertical
+              children: [
+                Text(
+                  'Laboratorio 4',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                ),
+                Text(
+                  'Grupo 12',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white70
+                        : Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        Positioned(
-          bottom: 0,
-          left: 140,
-          child: Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-                color: Colors.redAccent.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(10)),
-            transform: Matrix4.rotationZ(0.9),
-          ),
-        ),
-        Positioned(
-          top: 30,
-          right: 35,
-          child: Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-                color: Colors.amber.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(10)),
-            transform: Matrix4.rotationZ(0.9),
-          ),
-        ),
-        Positioned(
-          top: 70,
-          right: -10,
-          child: Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(5)),
-            transform: Matrix4.rotationZ(0.9),
-          ),
-        ),
-        Container(
-          alignment: Alignment.bottomRight,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: const Text(
-            '[  Menu  ]',
-            style: TextStyle(
-                fontSize: 13, color: Colors.black54, fontFamily: 'RobotoMono'),
-            textAlign: TextAlign.right,
-          ),
-        ),
-      ]),
+      ),
     );
   }
 }
