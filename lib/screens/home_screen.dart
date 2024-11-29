@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tp2_flutter_grupo12/screens/profile_screen.dart'; // Perfil
-import 'package:tp2_flutter_grupo12/screens/balot_list_screen.dart'; // Películas
-import 'package:tp2_flutter_grupo12/screens/jugadores_list_screen.dart';
-// Agregar ruta de Agus
+import 'package:tp2_flutter_grupo12/screens/screens.dart';
 import 'package:tp2_flutter_grupo12/widgets/drawner_menu.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -35,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 40,
                         backgroundImage: AssetImage('assets/images/avatar.png'), // Imagen del avatar
                       ),
@@ -107,14 +104,14 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListTile(
-                  leading: Icon(Icons.movie, color: Colors.teal),
+                  leading: const Icon(Icons.movie, color: Colors.teal),
                   title: const Text('Películas (Balot)'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BalotListScreen(),
+                        builder: (context) => const BalotListScreen(),
                       ),
                     );
                   },
@@ -129,14 +126,14 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListTile(
-                  leading: Icon(Icons.sports_soccer, color: Colors.teal),
+                  leading: const Icon(Icons.sports_soccer, color: Colors.teal),
                   title: const Text('Jugadores de fútbol (Miqueleiz)'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => JugadoresListScreen(), // Modificar por el de Tomi
+                        builder: (context) => const JugadoresListScreen(), // Modificar por el de Tomi
                       ),
                     );
                   },
@@ -151,14 +148,14 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListTile(
-                  leading: Icon(Icons.people, color: Colors.teal),
+                  leading: const Icon(Icons.people, color: Colors.teal),
                   title: const Text('Usuarios (Puente)'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BalotListScreen(), // Modificar por el de Agus
+                        builder: (context) => const UsuariosListScreen(), // Modificar por el de Agus
                       ),
                     );
                   },
