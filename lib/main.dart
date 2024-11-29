@@ -30,12 +30,15 @@ class MyApp extends StatelessWidget {
           initialRoute: 'home',
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
-          themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          themeMode:
+              themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
           routes: {
             'home': (context) => const HomeScreen(),
             'custom_list': (context) => const CustomListScreen(),
             'profile': (context) => const ProfileScreen(),
             'custom_list_item': (context) => const CustomListItem(),
+            'jugadores_list': (context) => const JugadoresListScreen(),
+            'jugador_details': (context) => const JugadoresDetailsScreen(),
           },
         );
       },

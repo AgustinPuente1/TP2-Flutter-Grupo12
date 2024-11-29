@@ -5,6 +5,11 @@ class DrawerMenu extends StatelessWidget {
     {'route': 'home', 'title': 'Home', 'subtitle': 'Home + counter app'},
     {'route': 'custom_list', 'title': 'Custom list', 'subtitle': ''},
     {'route': 'profile', 'title': 'Perfil usuario', 'subtitle': ''},
+    {
+      'route': 'jugadores_list',
+      'title': 'Jugadores list',
+      'subtitle': 'Ir a la lista de Jugadores'
+    },
   ];
 
   DrawerMenu({super.key});
@@ -27,10 +32,12 @@ class DrawerMenu extends StatelessWidget {
                         iconColor: Colors.blueGrey,
                         title: Text(item['title']!,
                             style: const TextStyle(fontFamily: 'FuzzyBubbles')),
-                        subtitle: Text(item['subtitle']!.isEmpty
-                            ? 'Tap to go to ${item['title']}'
-                            : item['subtitle']!,
-                            style: const TextStyle(fontFamily: 'RobotoMono', fontSize: 11)),
+                        subtitle: Text(
+                            item['subtitle']!.isEmpty
+                                ? 'Tap to go to ${item['title']}'
+                                : item['subtitle']!,
+                            style: const TextStyle(
+                                fontFamily: 'RobotoMono', fontSize: 11)),
                         leading: const Icon(Icons.arrow_right),
                         /* trailing: const Icon(Icons.arrow_right), */
                         onTap: () {
