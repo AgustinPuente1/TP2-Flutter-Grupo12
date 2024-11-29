@@ -5,11 +5,8 @@ class DrawerMenu extends StatelessWidget {
     {'route': 'home', 'title': 'Home', 'subtitle': 'Home + counter app'},
     {'route': 'custom_list', 'title': 'Custom list', 'subtitle': ''},
     {'route': 'profile', 'title': 'Perfil usuario', 'subtitle': ''},
-    {
-      'route': 'jugadores_list',
-      'title': 'Jugadores list',
-      'subtitle': 'Ir a la lista de Jugadores'
-    },
+    {'route': 'jugadores_list','title': 'Jugadores list','subtitle': 'Ir a la lista de Jugadores'},
+    {'route': 'balot_list', 'title': 'Balot list', 'subtitle': 'Mejores Películas 2024'},
   ];
 
   DrawerMenu({super.key});

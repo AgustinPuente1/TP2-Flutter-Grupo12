@@ -4,3 +4,5 @@ export 'package:tp2_flutter_grupo12/screens/custom_list_screen.dart';
 export 'package:tp2_flutter_grupo12/screens/custom_list_item.dart';
 export 'package:tp2_flutter_grupo12/screens/jugadores_list_screen.dart';
 export 'package:tp2_flutter_grupo12/screens/jugadores_details.dart';
+export 'package:tp2_flutter_grupo12/screens/balot_list_screen.dart';
+export 'package:tp2_flutter_grupo12/screens/movies_details_screen.dart';

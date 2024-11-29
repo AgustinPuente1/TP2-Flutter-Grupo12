@@ -3,26 +3,21 @@ import 'package:provider/provider.dart';
 import 'package:tp2_flutter_grupo12/providers/theme_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Mi Perfil'),
         centerTitle: true,
-        title: const Text('ProfileScreen'),
-        elevation: 10,
+        elevation: 0,
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           children: [
-            HeaderProfile(size: size),
-            const Padding(
-              padding: EdgeInsets.all(15.0),
-              child: BodyProfile(),
-            ),
+            HeaderProfile(),
+            ProfileBody(),
           ],
         ),
       ),
@@ -30,47 +25,79 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class BodyProfile extends StatelessWidget {
-  const BodyProfile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
-    return Column(
-      children: [
-        SwitchListTile.adaptive(
-          title: const Text('Dark Mode'),
-          value: themeProvider.isDarkMode,
-          onChanged: (bool value) {
-            themeProvider.toggleTheme(value);
-          },
-        ),
-        const SizedBox(height: 15),
-      ],
-    );
-  }
-}
-
 class HeaderProfile extends StatelessWidget {
-  const HeaderProfile({
-    super.key,
-    required this.size,
-  });
-
-  final Size size;
+  const HeaderProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: size.height * 0.40,
-      color: const Color(0xff2d3e4f),
+      height: 300,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
       child: Center(
         child: CircleAvatar(
           radius: 100,
-          child: Image.asset('assets/images/avatar.png'),
+          backgroundImage: AssetImage('assets/images/avatar.png'),
+          backgroundColor: Colors.white,
         ),
+      ),
+    );
+  }
+}
+
+class ProfileBody extends StatelessWidget {
+  const ProfileBody({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+            child: Text(
+              'Ajustes de Modo Oscuro',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          Card(
+            color: isDarkMode ? Colors.grey[800] : Colors.white,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: ListTile(
+              title: const Text('Modo Oscuro'),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                    color: isDarkMode ? Colors.white : Colors.amber,
+                  ),
+                  Switch.adaptive(
+                    value: isDarkMode,
+                    onChanged: (bool value) {
+                      themeProvider.toggleTheme(value);
+                    },
+                    activeColor: Theme.of(context).colorScheme.primary,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
