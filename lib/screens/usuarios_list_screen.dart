@@ -29,7 +29,6 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
     _loadFavorites(); // Cargar favoritos desde SharedPreferences
   }
 
-  // Carga inicial de todos los usuarios (solo una vez)
   void _initializeUsuarios() {
     _originalElements = elements.map((element) {
       return Usuario(
@@ -40,7 +39,7 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
         email: element[4],
         gender: element[5],
         country: element[6],
-        isFavorite: false, // Por defecto no es favorito
+        isFavorite: element[7], 
       );
     }).toList();
     _auxiliarElements = List.from(_originalElements); // Copia para la UI
@@ -151,7 +150,7 @@ class _UsuariosListScreenState extends State<UsuariosListScreen> {
                     usuario: usuario,
                     onFavoriteChanged: (bool newFavorite) {
                       setState(() {
-                        usuario.isFavorite = newFavorite; // Actualiza el estado global
+                        usuario.isFavorite = newFavorite; // Actualizar favorito
                       });
                     },
                   ),

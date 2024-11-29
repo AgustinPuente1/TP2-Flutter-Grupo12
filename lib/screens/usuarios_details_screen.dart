@@ -46,7 +46,6 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            // Imagen del avatar con fondo contrastante
             GestureDetector(
               onTap: () => showDialog(
                 context: context,
@@ -62,12 +61,11 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
                   'assets/avatars/${widget.usuario.avatar}.png',
                   width: 180,
                   height: 180,
-                  fit: BoxFit.cover, // Asegura el tamaño uniforme
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
             const SizedBox(height: 20),
-            // Botón de favoritos con estrella
             IconButton(
               icon: Icon(
                 isFavorite ? Icons.star : Icons.star_border,
@@ -95,13 +93,13 @@ class _UsuarioDetailScreenState extends State<UsuarioDetailScreen> {
                   Expanded(
                     child: Text(
                       widget.usuario.email,
-                      overflow: TextOverflow.ellipsis, // Asegura que el correo no desborde
+                      overflow: TextOverflow.ellipsis, 
                     ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.copy, size: 18, color: Colors.grey),
-                    padding: EdgeInsets.zero, // Reduce el padding del botón
-                    constraints: const BoxConstraints(), // Elimina restricciones de tamaño
+                    padding: EdgeInsets.zero, 
+                    constraints: const BoxConstraints(), 
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: widget.usuario.email));
                       ScaffoldMessenger.of(context).showSnackBar(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+/*
+ * Widget para mostrar una tarjeta de usuario con información básica y un botón de favorito
+*/
 class UsuariosCard extends StatelessWidget {
   final String avatar;
   final String firstName;

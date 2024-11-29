@@ -1,4 +1,4 @@
-// id, avatar, first_name, last_name, email, gender, country 
+// id, avatar, first_name, last_name, email, gender, country, isFavorite
 
 const List elements = 
 [

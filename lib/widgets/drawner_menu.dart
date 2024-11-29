@@ -25,7 +25,7 @@ class DrawerMenu extends StatelessWidget {
                       dense: true,
                       iconColor: Theme.of(context).brightness == Brightness.dark
                           ? Colors.white
-                          : Colors.black, // Aseguramos que el color de los íconos se ajuste
+                          : Colors.black, 
                       title: Text(
                         item['title']!,
                         style: TextStyle(
@@ -33,7 +33,7 @@ class DrawerMenu extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
-                              : const Color.fromARGB(255, 53, 51, 51),
+                              : const Color.fromARGB(255, 94, 78, 99),
                         ),
                       ),
                       subtitle: Text(
@@ -51,7 +51,7 @@ class DrawerMenu extends StatelessWidget {
                         Icons.arrow_forward, 
                         color: Theme.of(context).brightness == Brightness.dark 
                             ? Colors.white 
-                            : Colors.black, // Aseguramos que las flechas sean visibles
+                            : Colors.black, 
                       ),
                       onTap: () {
                         Navigator.pop(context);
@@ -74,7 +74,7 @@ class _DrawerHeader extends StatelessWidget {
     return DrawerHeader(
       padding: EdgeInsets.zero,
       decoration: const BoxDecoration(
-        color: Colors.blueGrey, // Fondo del header con un color sutil
+        color: Colors.blueGrey, 
       ),
       child: Container(
         alignment: Alignment.centerLeft,
@@ -85,20 +85,20 @@ class _DrawerHeader extends StatelessWidget {
             CircleAvatar(
               radius: 30,
               backgroundColor: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white // Fondo oscuro para el modo oscuro
-                  : Colors.white, // Fondo blanco para el modo claro
+                  ? Colors.white 
+                  : Colors.white, 
               child: Icon(
                 Icons.account_circle,
                 size: 40,
                 color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.blueGrey
-                    : Colors.blueGrey, // Color del icono
+                    : Colors.blueGrey, 
               ),
             ),
             const SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center, // Alineación vertical
+              mainAxisAlignment: MainAxisAlignment.center, 
               children: [
                 Text(
                   'Laboratorio 4',
@@ -107,7 +107,7 @@ class _DrawerHeader extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.white
-                        : Colors.black,
+                        : const Color.fromARGB(255, 45, 43, 43),
                   ),
                 ),
                 Text(
